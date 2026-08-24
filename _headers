@@ -1,0 +1,24 @@
+# The app shell must always be revalidated with the origin so a new
+# deploy is visible immediately — this is the HTTP-level backup to the
+# service worker's own network-first strategy for these same files.
+/
+  Cache-Control: no-cache, must-revalidate
+
+/index.html
+  Cache-Control: no-cache, must-revalidate
+
+/manifest.json
+  Cache-Control: no-cache, must-revalidate
+
+# The service worker script itself must never be cached by the browser's
+# HTTP cache, or the browser won't notice it changed and will keep running
+# the old service worker (and therefore the old caching logic) forever.
+/sw.js
+  Cache-Control: no-cache, must-revalidate
+
+# Static, rarely-changing assets are safe to cache for a long time.
+/icon-192.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/icon-512.png
+  Cache-Control: public, max-age=31536000, immutable

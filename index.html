@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#4fae9c">
+<title>مهامي</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal-1:#8fc9d4;
+    --teal-2:#4fae9c;
+    --teal-3:#2dd4bf;
+    --mint-bg-top:#dcefe8;
+    --mint-bg-bottom:#9fd6c8;
+    --card-bg:rgba(255,255,255,0.55);
+    --card-bg-solid:#e7f4ef;
+    --ring:#5fbfa9;
+    --ink:#1c3a3a;
+    --ink-soft:#3f5f5c;
+    --important-accent:#ff8a5c;
+    --important-bg:rgba(255,138,92,0.14);
+    --danger:#e2685c;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    background:linear-gradient(180deg, var(--mint-bg-top) 0%, #c3e6da 45%, var(--mint-bg-bottom) 100%);
+    min-height:100vh;
+    color:var(--ink);
+    overflow-x:hidden;
+    padding-bottom:110px;
+  }
+  .header{
+    background:linear-gradient(135deg, var(--teal-1) 0%, var(--teal-2) 100%);
+    padding:22px 20px 46px 20px;
+    border-radius:0 0 32px 32px;
+    position:relative;
+    box-shadow:0 8px 24px rgba(45,120,110,0.18);
+  }
+  .header-top{
+    display:flex;
+    flex-direction:row-reverse;
+    justify-content:space-between;
+    align-items:flex-start;
+  }
+  .logout-btn{
+    background:rgba(255,255,255,0.22);
+    border:none;
+    color:#fff;
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-weight:600;
+    font-size:10.5px;
+    padding:6px 9px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .logout-btn svg{width:12px;height:12px;flex-shrink:0;}
+  .logout-btn:active{background:rgba(255,255,255,0.35);}
+  .header-actions{display:flex; flex-wrap:nowrap; gap:5px; justify-content:flex-start;}
+  .title-block{text-align:right;}
+  .title-lockup{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:9px;
+  }
+  .logo-mark{
+    width:30px;height:30px;
+    flex-shrink:0;
+  }
+  .title-block h1{
+    font-size:36px;
+    font-weight:700;
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    color:#fff;
+    margin:2px 0 0 0;
+    letter-spacing:0.5px;
+  }
+  .title-block .sub{
+    color:rgba(255,255,255,0.92);
+    font-size:15px;
+    font-weight:500;
+    margin-top:2px;
+  }
+
+  .stats-row{
+    display:flex;
+    gap:12px;
+    margin:-30px 18px 18px 18px;
+  }
+  .stat-box{
+    flex:1;
+    background:rgba(255,255,255,0.65);
+    backdrop-filter:blur(10px);
+    border-radius:24px;
+    padding:16px 12px 14px 12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    box-shadow:0 10px 26px rgba(40,110,100,0.14);
+  }
+  .stat-box .stat-label{
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--ink-soft);
+  }
+  .stat-ring-wrap{
+    position:relative;
+    width:82px;height:82px;
+  }
+  .stat-ring-wrap svg{transform:rotate(-90deg);}
+  .stat-ring-label{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stat-ring-label .pct{font-size:17px; font-weight:800; color:var(--ink);}
+  .stat-box .stat-count{
+    font-size:12px;
+    font-weight:500;
+    color:var(--ink-soft);
+  }
+
+  .task-list{
+    padding:0 18px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .task-item{
+    position:relative;
+    background:var(--card-bg-solid);
+    border-radius:12px;
+    height:48px;
+    padding:0 13px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    box-shadow:0 4px 14px rgba(60,140,125,0.08);
+    transition:all .35s ease;
+    overflow:hidden;
+  }
+  .task-item.important{
+    background:var(--important-bg);
+    box-shadow:0 4px 14px rgba(255,138,92,0.18);
+    border:1.5px solid rgba(255,138,92,0.35);
+  }
+  .task-item.done{
+    opacity:0.6;
+    order:99;
+  }
+  .task-item.done .task-text{
+    text-decoration:line-through;
+    color:#7c8f8c;
+  }
+  .task-left-icons{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:7px;
+    flex-shrink:0;
+  }
+  .icon-btn{
+    width:17px;height:17px;
+    display:flex;align-items:center;justify-content:center;
+    background:none;border:none;cursor:pointer;
+    opacity:0.5;
+    padding:0;
+  }
+  .icon-btn:active{opacity:1;}
+  .star-btn svg{width:14px;height:14px;}
+  .star-btn.active svg path{fill:var(--important-accent); stroke:var(--important-accent);}
+  .trash-btn svg{width:13px;height:13px;}
+  .trash-btn svg path{stroke:var(--danger);}
+  .edit-btn svg{width:13px;height:13px;}
+  .edit-btn svg path,.edit-btn svg polygon{stroke:var(--teal-2);}
+  .archive-btn svg{width:13px;height:13px;}
+  .archive-btn svg path,.archive-btn svg rect,.archive-btn svg line{stroke:var(--ink-soft);}
+
+  .task-main{
+    flex:1;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+    overflow:hidden;
+  }
+  .due-badge{
+    font-size:11px;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:10px;
+    background:#e2f0eb;
+    color:var(--ink-soft);
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    flex-shrink:0;
+    white-space:nowrap;
+  }
+  .due-badge.overdue{background:rgba(226,104,92,0.16); color:var(--danger);}
+  .due-badge.today{background:rgba(255,138,92,0.16); color:var(--important-accent);}
+  .due-badge svg{width:11px;height:11px;}
+
+  .task-text{
+    flex:1;
+    text-align:right;
+    font-size:14px;
+    font-weight:500;
+    line-height:1.3;
+    color:var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    min-width:0;
+  }
+  .checkbox{
+    width:32px;height:32px;
+    border-radius:50%;
+    border:2.5px solid var(--ring);
+    flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    background:transparent;
+    transition:all .25s ease;
+  }
+  .checkbox.checked{
+    background:linear-gradient(135deg, var(--teal-2), var(--teal-3));
+    border-color:transparent;
+  }
+  .checkbox svg{width:16px;height:16px;opacity:0;transform:scale(.5);transition:all .25s ease;}
+  .checkbox.checked svg{opacity:1;transform:scale(1);}
+
+  .empty-state{
+    text-align:center;
+    color:var(--ink-soft);
+    font-weight:600;
+    padding:40px 20px;
+    font-size:15px;
+  }
+
+  .celebrate-emoji{
+    position:fixed;
+    font-size:26px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    z-index:200;
+    animation:celebrateRise 0.9s ease-out forwards;
+  }
+  @keyframes celebrateRise{
+    0%{ opacity:0; transform:translate(-50%,-50%) scale(0.6); }
+    25%{ opacity:1; transform:translate(-50%,-130%) scale(1.15); }
+    100%{ opacity:0; transform:translate(-50%,-230%) scale(1); }
+  }
+
+  .chart-card{
+    margin:22px 18px 18px 18px;
+    background:rgba(255,255,255,0.6);
+    border-radius:26px;
+    padding:20px 18px 12px 18px;
+    box-shadow:0 10px 26px rgba(40,110,100,0.13);
+  }
+  .chart-title{
+    font-size:20px;
+    font-weight:800;
+    color:var(--ink);
+    text-align:right;
+    margin-bottom:10px;
+  }
+  .chart-sub{
+    font-size:12px;
+    color:var(--ink-soft);
+    text-align:right;
+    font-weight:400;
+    margin-bottom:6px;
+  }
+
+  .fab{
+    position:fixed;
+    bottom:26px;
+    right:22px;
+    width:60px;height:60px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--teal-3), var(--teal-2));
+    border:none;
+    box-shadow:0 10px 24px rgba(45,165,150,0.45);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    z-index:50;
+  }
+  .fab svg{width:26px;height:26px;}
+  .fab:active{transform:scale(0.92);}
+
+  .notes-fab{
+    position:fixed;
+    bottom:26px;
+    left:22px;
+    width:60px;height:60px;
+    border-radius:50%;
+    background:linear-gradient(135deg, #ffb37b, #ff8a5c);
+    border:none;
+    box-shadow:0 10px 24px rgba(255,138,92,0.45);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:50;
+  }
+  .notes-fab svg{width:24px;height:24px;}
+  .notes-fab:active{transform:scale(0.92);}
+  .notes-fab-label{
+    position:absolute;
+    bottom:-20px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+
+  /* modal */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(20,45,42,0.45);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:100;
+    backdrop-filter:blur(2px);
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-sheet{
+    background:#f2faf7;
+    width:100%;
+    max-width:480px;
+    border-radius:26px 26px 0 0;
+    padding:22px 20px 28px 20px;
+    animation:slideUp .25s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+  .modal-sheet h3{
+    text-align:right;
+    font-size:19px;
+    font-weight:800;
+    margin:0 0 14px 0;
+    color:var(--ink);
+  }
+  .modal-sheet textarea{
+    width:100%;
+    min-height:70px;
+    border-radius:16px;
+    border:1.5px solid #c9e5dd;
+    padding:12px 14px;
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-size:16px;
+    text-align:right;
+    resize:none;
+    background:#fff;
+    color:var(--ink);
+  }
+  .modal-sheet textarea:focus{outline:none; border-color:var(--teal-2);}
+
+  .date-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:14px;
+    gap:10px;
+  }
+  .date-row label{
+    font-weight:700;
+    font-size:14px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .date-row input[type="date"]{
+    flex:1;
+    border-radius:14px;
+    border:1.5px solid #c9e5dd;
+    padding:9px 12px;
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-size:14px;
+    background:#fff;
+    color:var(--ink);
+    text-align:right;
+  }
+  .date-row input[type="date"]:focus{outline:none; border-color:var(--teal-2);}
+  .clear-date-btn{
+    background:none; border:none; color:var(--danger);
+    font-size:12px; font-weight:700; cursor:pointer; padding:4px;
+  }
+
+  .modal-important-row{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:14px;
+    font-weight:700;
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+  .toggle{
+    width:44px;height:26px;
+    border-radius:14px;
+    background:#d7e9e3;
+    position:relative;
+    cursor:pointer;
+    transition:background .2s;
+  }
+  .toggle.on{background:var(--important-accent);}
+  .toggle .knob{
+    position:absolute;top:3px;right:3px;
+    width:20px;height:20px;border-radius:50%;
+    background:#fff;
+    transition:right .2s;
+    box-shadow:0 1px 3px rgba(0,0,0,0.25);
+  }
+  .toggle.on .knob{right:21px;}
+  .modal-actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+  }
+  .btn{
+    flex:1;
+    padding:13px;
+    border-radius:16px;
+    border:none;
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-weight:800;
+    font-size:15px;
+    cursor:pointer;
+  }
+  .btn-cancel{background:#e2ede9; color:var(--ink-soft);}
+  .btn-save{background:linear-gradient(135deg, var(--teal-3), var(--teal-2)); color:#fff;}
+  .btn-save:disabled{opacity:0.5;}
+
+  .backup-hint{
+    text-align:right;
+    font-size:13px;
+    font-weight:500;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin:0 0 16px 0;
+  }
+  .backup-actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .backup-actions .btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:13px;
+  }
+  .backup-export-btn{
+    background:linear-gradient(135deg, var(--teal-3), var(--teal-2));
+    color:#fff;
+  }
+  .backup-import-btn{
+    background:#e7f4ef;
+    color:var(--teal-2);
+    border:1.5px solid rgba(79,174,156,0.35);
+  }
+
+  /* archive overlay */
+  .archive-sheet{
+    background:#f2faf7;
+    width:100%;
+    max-width:480px;
+    border-radius:26px 26px 0 0;
+    padding:20px 18px 24px 18px;
+    max-height:80vh;
+    display:flex;
+    flex-direction:column;
+    animation:slideUp .25s ease;
+  }
+  .archive-sheet h3{
+    text-align:right;
+    font-size:19px;
+    font-weight:800;
+    margin:0 0 12px 0;
+    color:var(--ink);
+  }
+  .archive-list{
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding-bottom:6px;
+  }
+  .archive-item{
+    background:#fff;
+    border-radius:18px;
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    box-shadow:0 3px 10px rgba(60,140,125,0.07);
+  }
+  .archive-item .arc-text{
+    flex:1;
+    text-align:right;
+    font-size:15px;
+    font-weight:500;
+    color:var(--ink);
+  }
+  .archive-item .arc-date{
+    font-size:11px;
+    color:var(--ink-soft);
+    font-weight:500;
+    margin-top:2px;
+  }
+  .archive-item .arc-actions{
+    display:flex;
+    gap:8px;
+    flex-shrink:0;
+  }
+  .arc-actions button{
+    background:none;border:none;cursor:pointer;
+    width:24px;height:24px;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0.6;
+  }
+  .arc-actions button:active{opacity:1;}
+  .arc-actions svg{width:18px;height:18px;}
+  .archive-empty{
+    text-align:center;
+    color:var(--ink-soft);
+    font-weight:600;
+    padding:30px 10px;
+    font-size:14px;
+  }
+  .close-archive-btn{
+    margin-top:14px;
+    width:100%;
+    padding:13px;
+    border-radius:16px;
+    border:none;
+    background:#e2ede9;
+    color:var(--ink-soft);
+    font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-weight:800;
+    font-size:15px;
+    cursor:pointer;
+  }
+
+  /* notes board */
+  .notes-board{
+    padding:22px 16px 20px 16px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .sticky-note{
+    position:relative;
+    border-radius:6px 6px 10px 10px;
+    padding:22px 14px 16px 14px;
+    min-height:130px;
+    box-shadow:0 8px 16px rgba(30,80,70,0.18), 0 2px 4px rgba(30,80,70,0.12);
+    display:flex;
+    flex-direction:column;
+    word-break:break-word;
+  }
+  .sticky-note .pin{
+    position:absolute;
+    top:-9px; left:50%; transform:translateX(-50%);
+    width:18px;height:18px;
+    border-radius:50%;
+    box-shadow:0 3px 5px rgba(0,0,0,0.35);
+    border:2px solid rgba(255,255,255,0.5);
+  }
+  .sticky-note .note-text{
+    flex:1;
+    font-size:14.5px;
+    font-weight:600;
+    color:#20342f;
+    text-align:right;
+    white-space:pre-wrap;
+    line-height:1.55;
+    overflow-wrap:anywhere;
+  }
+  .sticky-note .note-actions{
+    display:flex;
+    justify-content:flex-start;
+    gap:8px;
+    margin-top:10px;
+    padding-top:8px;
+    border-top:1px solid rgba(0,0,0,0.08);
+  }
+  .sticky-note .note-actions button{
+    background:rgba(255,255,255,0.55);
+    border:none;
+    width:26px;height:26px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    opacity:0.75;
+  }
+  .sticky-note .note-actions button:active{opacity:1;}
+  .sticky-note .note-actions svg{width:14px;height:14px;}
+
+  .notes-empty{
+    grid-column:1 / -1;
+    text-align:center;
+    color:var(--ink-soft);
+    font-weight:600;
+    padding:60px 20px;
+    font-size:15px;
+  }
+
+  .color-row{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:14px;
+  }
+  .color-swatch{
+    width:30px;height:30px;
+    border-radius:50%;
+    cursor:pointer;
+    border:2.5px solid transparent;
+    box-shadow:0 2px 5px rgba(0,0,0,0.15);
+  }
+  .color-swatch.selected{border-color:var(--ink);}
+</style>
+</head>
+<body>
+
+<div id="tasksView">
+<div class="header">
+  <div class="header-top">
+    <div class="header-actions">
+      <button class="logout-btn" id="reportOpenBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="9" y2="17"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="15" y1="9" x2="15" y2="17"/></svg>
+        تقرير
+      </button>
+      <button class="logout-btn" id="backupOpenBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        نسخ احتياطي
+      </button>
+      <button class="logout-btn" id="archiveOpenBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8H3l1-4h16z"/><path d="M4 8v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        الأرشيف
+      </button>
+    </div>
+    <div class="title-block">
+      <div class="title-lockup">
+        <svg class="logo-mark" viewBox="0 0 32 32" fill="none">
+          <line x1="16" y1="0" x2="16" y2="7" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+          <line x1="16" y1="25" x2="16" y2="32" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+          <line x1="0" y1="16" x2="7" y2="16" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+          <line x1="25" y1="16" x2="32" y2="16" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="7.5" fill="none" stroke="#fff" stroke-width="2.4"/>
+          <path d="M12.3 16.3l2.5 2.5 5-5.2" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1>مهامي</h1>
+      </div>
+      <div class="sub">تركيز اليوم ✨</div>
+    </div>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-box">
+    <div class="stat-label">إنجاز اليوم</div>
+    <div class="stat-ring-wrap">
+      <svg width="82" height="82" viewBox="0 0 82 82">
+        <circle cx="41" cy="41" r="34" fill="none" stroke="#dcede7" stroke-width="9"/>
+        <circle id="ringDaily" cx="41" cy="41" r="34" fill="none" stroke="url(#gradDaily)" stroke-width="9" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+        <defs>
+          <linearGradient id="gradDaily" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff9f6b"/>
+            <stop offset="100%" stop-color="#ff8a5c"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="stat-ring-label"><div class="pct" id="pctDaily">0%</div></div>
+    </div>
+    <div class="stat-count" id="countDaily">0 من 0</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-label">الإنجاز العام</div>
+    <div class="stat-ring-wrap">
+      <svg width="82" height="82" viewBox="0 0 82 82">
+        <circle cx="41" cy="41" r="34" fill="none" stroke="#dcede7" stroke-width="9"/>
+        <circle id="ringOverall" cx="41" cy="41" r="34" fill="none" stroke="url(#gradOverall)" stroke-width="9" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+        <defs>
+          <linearGradient id="gradOverall" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2dd4bf"/>
+            <stop offset="100%" stop-color="#4fae9c"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="stat-ring-label"><div class="pct" id="pctOverall">0%</div></div>
+    </div>
+    <div class="stat-count" id="countOverall">0 من 0</div>
+  </div>
+</div>
+
+<div class="task-list" id="taskList"></div>
+
+<div class="chart-card">
+  <div class="chart-title">التقدم اليومي</div>
+  <div class="chart-sub" id="chartSub">مهام مُنجزة خلال هذا الأسبوع</div>
+  <svg id="chartSvg" width="100%" viewBox="0 0 340 190" preserveAspectRatio="xMidYMid meet"></svg>
+</div>
+
+<button class="fab" id="addBtn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</button>
+
+<button class="notes-fab" id="notesOpenBtn" aria-label="ملاحظاتي">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+  <span class="notes-fab-label">ملاحظاتي</span>
+</button>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-sheet">
+    <h3 id="modalTitle">مهمة جديدة</h3>
+    <textarea id="taskInput" placeholder="اكتب المهمة هنا..." maxlength="200"></textarea>
+    <div class="date-row">
+      <label>تاريخ الاستحقاق (اختياري)</label>
+      <input type="date" id="dueDateInput">
+      <button class="clear-date-btn" id="clearDateBtn">مسح</button>
+    </div>
+    <div class="modal-important-row">
+      <div class="toggle" id="importantToggle"><div class="knob"></div></div>
+      <span>تمييزها كمهمة مهمة</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" id="cancelBtn">إلغاء</button>
+      <button class="btn btn-save" id="saveBtn">إضافة</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="backupOverlay">
+  <div class="modal-sheet">
+    <h3>نسخ احتياطي</h3>
+    <p class="backup-hint">احفظ نسخة من مهامك وملاحظاتك كملف على جهازك، أو استعد نسخة سابقة. لا يحتاج إنترنت ولا حساب.</p>
+    <div class="backup-actions">
+      <button class="btn backup-export-btn" id="backupExportBtn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تصدير نسخة احتياطية
+      </button>
+      <button class="btn backup-import-btn" id="backupImportBtn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4fae9c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        استيراد نسخة احتياطية
+      </button>
+      <input type="file" id="backupFileInput" accept="application/json" style="display:none;">
+    </div>
+    <button class="btn btn-cancel" id="backupCloseBtn" style="margin-top:14px; width:100%;">إغلاق</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="archiveOverlay">
+  <div class="archive-sheet">
+    <h3>الأرشيف</h3>
+    <div class="archive-list" id="archiveList"></div>
+    <button class="close-archive-btn" id="closeArchiveBtn">إغلاق</button>
+  </div>
+</div>
+</div><!-- /tasksView -->
+
+<div id="notesView" style="display:none;">
+  <div class="header notes-header">
+    <div class="header-top">
+      <button class="logout-btn" id="notesBackBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" transform="rotate(180 12 12)"/></svg>
+        رجوع
+      </button>
+      <div class="title-block">
+        <h1 style="font-size:32px;">ملاحظاتي</h1>
+        <div class="sub">أفكارك وروابطك بمكان واحد 📌</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-board" id="notesBoard"></div>
+
+  <button class="fab" id="noteAddBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
+  <div class="modal-overlay" id="noteModalOverlay">
+    <div class="modal-sheet">
+      <h3 id="noteModalTitle">ملاحظة جديدة</h3>
+      <textarea id="noteInput" placeholder="اكتب ملاحظتك هنا... (نص، رابط، أي شيء)" maxlength="2000" style="min-height:140px;"></textarea>
+      <div class="color-row" id="colorRow"></div>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" id="noteCancelBtn">إلغاء</button>
+        <button class="btn btn-save" id="noteSaveBtn">إضافة</button>
+      </div>
+    </div>
+  </div>
+</div><!-- /notesView -->
+
+<script>
+const STORAGE_KEY = 'mahamy_tasks_v1';
+let tasks = [];
+let isImportant = false;
+let editingId = null;
+
+function loadTasks(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    tasks = raw ? JSON.parse(raw) : seedTasks();
+  }catch(e){ tasks = seedTasks(); }
+}
+function seedTasks(){
+  return [];
+}
+function saveTasks(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+function playTick(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.13);
+  }catch(e){}
+  if(navigator.vibrate){ navigator.vibrate([70, 40, 100]); }
+}
+
+const CELEBRATE_EMOJIS = ['🎉','👏','💪','🔥','✨','🙌'];
+function showCelebration(el){
+  if(!el) return;
+  const rect = el.getBoundingClientRect();
+  const span = document.createElement('span');
+  span.textContent = CELEBRATE_EMOJIS[Math.floor(Math.random()*CELEBRATE_EMOJIS.length)];
+  span.className = 'celebrate-emoji';
+  span.style.left = (rect.left + rect.width/2) + 'px';
+  span.style.top = (rect.top + rect.height/2) + 'px';
+  document.body.appendChild(span);
+  setTimeout(()=>span.remove(), 950);
+}
+
+function render(){
+  const list = document.getElementById('taskList');
+  list.innerHTML = '';
+
+  if(tasks.filter(t=>!t.archived).length === 0){
+    list.innerHTML = '<div class="empty-state">لا توجد مهام بعد، اضغط + لإضافة مهمة جديدة</div>';
+  } else {
+    // sort: not done first (soonest due date first, then createdAt), done tasks at bottom (by completedAt desc)
+    const visible = tasks.filter(t=>!t.archived);
+    const active = visible.filter(t=>!t.done).sort((a,b)=>{
+      if(a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate) || a.createdAt-b.createdAt;
+      if(a.dueDate) return -1;
+      if(b.dueDate) return 1;
+      return a.createdAt-b.createdAt;
+    });
+    const done = visible.filter(t=>t.done).sort((a,b)=>b.completedAt-a.completedAt);
+    [...active, ...done].forEach(t => list.appendChild(renderTask(t)));
+  }
+
+  const total = tasks.length;
+  const doneCount = tasks.filter(t=>t.done).length;
+  const overallPct = total ? Math.round((doneCount/total)*100) : 0;
+
+  const startOfToday = new Date();
+  startOfToday.setHours(0,0,0,0);
+  const startTs = startOfToday.getTime();
+  const doneTodayCount = tasks.filter(t=>t.done && t.completedAt && t.completedAt >= startTs).length;
+  const activeCount = tasks.filter(t=>!t.done).length;
+  const dailyTotal = doneTodayCount + activeCount;
+  const dailyPct = dailyTotal ? Math.round((doneTodayCount/dailyTotal)*100) : 0;
+
+  const circumference = 213.6;
+  document.getElementById('pctOverall').textContent = overallPct + '%';
+  document.getElementById('countOverall').textContent = `${doneCount} من ${total}`;
+  document.getElementById('ringOverall').style.strokeDashoffset = circumference - (overallPct/100)*circumference;
+
+  document.getElementById('pctDaily').textContent = dailyPct + '%';
+  document.getElementById('countDaily').textContent = `${doneTodayCount} من ${dailyTotal}`;
+  document.getElementById('ringDaily').style.strokeDashoffset = circumference - (dailyPct/100)*circumference;
+
+  renderChart();
+  renderArchiveList();
+}
+
+function formatDueDate(dateStr){
+  const parts = dateStr.split('-');
+  const d = new Date(Number(parts[0]), Number(parts[1])-1, Number(parts[2]));
+  return new Intl.DateTimeFormat('ar', {day:'numeric', month:'short'}).format(d);
+}
+function dueDateStatus(dateStr){
+  const todayStr = new Date().toISOString().slice(0,10);
+  if(dateStr < todayStr) return 'overdue';
+  if(dateStr === todayStr) return 'today';
+  return 'future';
+}
+
+function renderTask(t){
+  const item = document.createElement('div');
+  item.className = 'task-item' + (t.done ? ' done' : '') + (t.important ? ' important' : '');
+
+  const leftIcons = document.createElement('div');
+  leftIcons.className = 'task-left-icons';
+
+  const trashBtn = document.createElement('button');
+  trashBtn.className = 'icon-btn trash-btn';
+  trashBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+  trashBtn.onclick = () => deleteTask(t.id);
+
+  const editBtn = document.createElement('button');
+  editBtn.className = 'icon-btn edit-btn';
+  editBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+  editBtn.onclick = () => openEditModal(t.id);
+
+  const starBtn = document.createElement('button');
+  starBtn.className = 'icon-btn star-btn' + (t.important ? ' active' : '');
+  starBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#ff8a5c" stroke-width="2"><path d="M12 2l2.9 6.5 7.1.6-5.4 4.7 1.6 7-6.2-3.8-6.2 3.8 1.6-7L2 9.1l7.1-.6z"/></svg>';
+  starBtn.onclick = () => toggleImportant(t.id);
+
+  leftIcons.appendChild(trashBtn);
+  leftIcons.appendChild(editBtn);
+  leftIcons.appendChild(starBtn);
+
+  if(t.done){
+    const archiveBtn = document.createElement('button');
+    archiveBtn.className = 'icon-btn archive-btn';
+    archiveBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8H3l1-4h16z"/><path d="M4 8v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>';
+    archiveBtn.onclick = () => archiveTask(t.id);
+    leftIcons.appendChild(archiveBtn);
+  }
+
+  const main = document.createElement('div');
+  main.className = 'task-main';
+
+  const text = document.createElement('div');
+  text.className = 'task-text';
+  text.textContent = t.text;
+  main.appendChild(text);
+
+  if(t.dueDate && !t.done){
+    const status = dueDateStatus(t.dueDate);
+    const badge = document.createElement('div');
+    badge.className = 'due-badge' + (status === 'overdue' ? ' overdue' : status === 'today' ? ' today' : '');
+    badge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>${formatDueDate(t.dueDate)}</span>`;
+    main.appendChild(badge);
+  }
+
+  const checkbox = document.createElement('div');
+  checkbox.className = 'checkbox' + (t.done ? ' checked' : '');
+  checkbox.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  checkbox.onclick = (e) => toggleDone(t.id, e.currentTarget);
+
+  item.appendChild(checkbox);
+  item.appendChild(main);
+  item.appendChild(leftIcons);
+  return item;
+}
+
+function toggleDone(id, el){
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  t.done = !t.done;
+  t.completedAt = t.done ? Date.now() : null;
+  saveTasks();
+  if(t.done){ playTick(); showCelebration(el); }
+  render();
+}
+
+function toggleImportant(id){
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  t.important = !t.important;
+  saveTasks();
+  render();
+}
+
+function deleteTask(id){
+  tasks = tasks.filter(x=>x.id!==id);
+  saveTasks();
+  render();
+}
+
+function addTask(text, important, dueDate){
+  tasks.push({
+    id: uid(),
+    text: text,
+    done:false,
+    important: important,
+    dueDate: dueDate || null,
+    archived: false,
+    createdAt: Date.now(),
+    completedAt: null
+  });
+  saveTasks();
+  render();
+}
+
+function updateTask(id, text, important, dueDate){
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  t.text = text;
+  t.important = important;
+  t.dueDate = dueDate || null;
+  saveTasks();
+  render();
+}
+
+function archiveTask(id){
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  t.archived = true;
+  saveTasks();
+  render();
+}
+
+function restoreTask(id){
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  t.archived = false;
+  saveTasks();
+  render();
+}
+
+function permanentDeleteTask(id){
+  if(!confirm('حذف هذه المهمة نهائياً من الأرشيف؟')) return;
+  tasks = tasks.filter(x=>x.id!==id);
+  saveTasks();
+  render();
+}
+
+function renderArchiveList(){
+  const wrap = document.getElementById('archiveList');
+  if(!wrap) return;
+  const archived = tasks.filter(t=>t.archived).sort((a,b)=>(b.completedAt||b.createdAt)-(a.completedAt||a.createdAt));
+  if(archived.length === 0){
+    wrap.innerHTML = '<div class="archive-empty">لا توجد مهام مؤرشفة</div>';
+    return;
+  }
+  wrap.innerHTML = '';
+  archived.forEach(t=>{
+    const row = document.createElement('div');
+    row.className = 'archive-item';
+
+    const actions = document.createElement('div');
+    actions.className = 'arc-actions';
+
+    const delBtn = document.createElement('button');
+    delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#e2685c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+    delBtn.onclick = () => permanentDeleteTask(t.id);
+
+    const restoreBtn = document.createElement('button');
+    restoreBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#4fae9c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-9.36L1 10"/></svg>';
+    restoreBtn.onclick = () => restoreTask(t.id);
+
+    actions.appendChild(delBtn);
+    actions.appendChild(restoreBtn);
+
+    const textWrap = document.createElement('div');
+    textWrap.style.flex = '1';
+    const txt = document.createElement('div');
+    txt.className = 'arc-text';
+    txt.textContent = t.text;
+    const date = document.createElement('div');
+    date.className = 'arc-date';
+    date.style.textAlign = 'right';
+    date.textContent = t.completedAt ? 'أُنجزت: ' + new Intl.DateTimeFormat('ar', {day:'numeric', month:'short', year:'numeric'}).format(new Date(t.completedAt)) : '';
+    textWrap.appendChild(txt);
+    textWrap.appendChild(date);
+
+    row.appendChild(actions);
+    row.appendChild(textWrap);
+    wrap.appendChild(row);
+  });
+}
+
+// ---- chart ----
+function renderChart(){
+  const svg = document.getElementById('chartSvg');
+  const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0,0,0,0);
+
+  const counts = [0,0,0,0,0,0,0];
+  tasks.forEach(t=>{
+    if(t.done && t.completedAt){
+      const d = new Date(t.completedAt);
+      const diffDays = Math.floor((d - startOfWeek) / 86400000);
+      if(diffDays >= 0 && diffDays < 7){
+        counts[diffDays]++;
+      }
+    }
+  });
+
+  const w = 340, h = 190;
+  const padL = 24, padR = 24, padT = 18, padB = 30;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+  const maxVal = Math.max(4, ...counts);
+  const stepX = plotW / (counts.length - 1);
+
+  function xFor(i){ return padL + i*stepX; }
+  function yFor(v){ return padT + plotH - (v/maxVal)*plotH; }
+
+  let svgHtml = '';
+
+  // gradient defs
+  svgHtml += `<defs>
+    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4fae9c"/>
+      <stop offset="100%" stop-color="#2dd4bf"/>
+    </linearGradient>
+  </defs>`;
+
+  // gridlines
+  const gridSteps = 4;
+  for(let i=0;i<=gridSteps;i++){
+    const gy = padT + (plotH/gridSteps)*i;
+    svgHtml += `<line x1="${padL}" y1="${gy}" x2="${w-padR}" y2="${gy}" stroke="#d7ebe4" stroke-width="1"/>`;
+  }
+
+  // build smooth path (catmull-rom to bezier)
+  const pts = counts.map((c,i)=>({x:xFor(i), y:yFor(c)}));
+  function smoothPath(pts){
+    if(pts.length < 2) return '';
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for(let i=0;i<pts.length-1;i++){
+      const p0 = pts[i===0?0:i-1];
+      const p1 = pts[i];
+      const p2 = pts[i+1];
+      const p3 = pts[i+2 < pts.length ? i+2 : i+1];
+      const cp1x = p1.x + (p2.x - p0.x)/6;
+      const cp1y = p1.y + (p2.y - p0.y)/6;
+      const cp2x = p2.x - (p3.x - p1.x)/6;
+      const cp2y = p2.y - (p3.y - p1.y)/6;
+      d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+    }
+    return d;
+  }
+  const linePath = smoothPath(pts);
+  const areaPath = linePath + ` L ${pts[pts.length-1].x} ${padT+plotH} L ${pts[0].x} ${padT+plotH} Z`;
+
+  svgHtml += `<path d="${areaPath}" fill="url(#areaGrad)"/>`;
+  svgHtml += `<path d="${linePath}" fill="none" stroke="url(#lineGrad)" stroke-width="3" stroke-linecap="round"/>`;
+
+  // dots + value labels + day labels
+  const todayIdx = now.getDay();
+  pts.forEach((p,i)=>{
+    const isToday = i === todayIdx;
+    svgHtml += `<circle cx="${p.x}" cy="${p.y}" r="${isToday?5.5:4}" fill="#fff" stroke="${isToday? '#ff8a5c':'#4fae9c'}" stroke-width="2.5"/>`;
+    if(counts[i] > 0){
+      svgHtml += `<text x="${p.x}" y="${p.y-10}" font-size="11" font-weight="700" fill="#2b5c53" text-anchor="middle" font-family="IBM Plex Sans Arabic,sans-serif">${counts[i]}</text>`;
+    }
+    svgHtml += `<text x="${p.x}" y="${h-8}" font-size="10.5" font-weight="${isToday?'800':'600'}" fill="${isToday?'#ff8a5c':'#5b7a75'}" text-anchor="middle" font-family="IBM Plex Sans Arabic,sans-serif">${dayNames[i]}</text>`;
+  });
+
+  svg.innerHTML = svgHtml;
+
+  const totalDone = counts.reduce((a,b)=>a+b,0);
+  document.getElementById('chartSub').textContent = `أنجزت ${totalDone} مهمة هذا الأسبوع`;
+}
+
+// ---- modal ----
+const overlay = document.getElementById('modalOverlay');
+const modalTitle = document.getElementById('modalTitle');
+const taskInput = document.getElementById('taskInput');
+const dueDateInput = document.getElementById('dueDateInput');
+const importantToggle = document.getElementById('importantToggle');
+const saveBtn = document.getElementById('saveBtn');
+
+function openAddModal(){
+  editingId = null;
+  modalTitle.textContent = 'مهمة جديدة';
+  saveBtn.textContent = 'إضافة';
+  taskInput.value = '';
+  dueDateInput.value = '';
+  isImportant = false;
+  importantToggle.classList.remove('on');
+  overlay.classList.add('open');
+  setTimeout(()=>taskInput.focus(), 100);
+}
+
+function openEditModal(id){
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  editingId = id;
+  modalTitle.textContent = 'تعديل المهمة';
+  saveBtn.textContent = 'حفظ';
+  taskInput.value = t.text;
+  dueDateInput.value = t.dueDate || '';
+  isImportant = !!t.important;
+  importantToggle.classList.toggle('on', isImportant);
+  overlay.classList.add('open');
+  setTimeout(()=>taskInput.focus(), 100);
+}
+
+document.getElementById('addBtn').onclick = openAddModal;
+document.getElementById('cancelBtn').onclick = () => overlay.classList.remove('open');
+overlay.onclick = (e) => { if(e.target === overlay) overlay.classList.remove('open'); };
+document.getElementById('clearDateBtn').onclick = () => { dueDateInput.value = ''; };
+importantToggle.onclick = () => {
+  isImportant = !isImportant;
+  importantToggle.classList.toggle('on', isImportant);
+};
+saveBtn.onclick = () => {
+  const val = taskInput.value.trim();
+  if(!val) return;
+  const due = dueDateInput.value || null;
+  if(editingId){
+    updateTask(editingId, val, isImportant, due);
+  } else {
+    addTask(val, isImportant, due);
+  }
+  overlay.classList.remove('open');
+};
+taskInput.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault();
+    saveBtn.click();
+  }
+});
+
+// ---- PDF report (tasks only, colorful, bold, phone-friendly) ----
+let reportLibsPromise = null;
+function loadReportLibs(){
+  if(reportLibsPromise) return reportLibsPromise;
+  const loadScript = (src) => new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  reportLibsPromise = Promise.all([
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+  ]);
+  return reportLibsPromise;
+}
+
+function buildReportHTML(){
+  const visible = tasks.filter(t=>!t.archived);
+  const important = visible.filter(t=>t.important && !t.done);
+  const normal = visible.filter(t=>!t.important && !t.done);
+  const done = visible.filter(t=>t.done);
+  const total = visible.length;
+  const doneCount = done.length;
+  const pct = total ? Math.round((doneCount/total)*100) : 0;
+  const dateStr = new Intl.DateTimeFormat('ar', {year:'numeric', month:'long', day:'numeric'}).format(new Date());
+
+  function taskRow(t, opts){
+    opts = opts || {};
+    const accent = opts.accent || '#4fae9c';
+    const bg = opts.bg || '#eef8f5';
+    const textStyle = opts.done ? 'text-decoration:line-through;color:#8a9c98;' : 'color:#173330;';
+    const dueHtml = t.dueDate ? `<div style="font-size:15px;font-weight:600;color:#6b8781;margin-top:4px;">📅 ${new Intl.DateTimeFormat('ar',{day:'numeric',month:'short'}).format(new Date(t.dueDate))}</div>` : '';
+    const icon = opts.done ? '✅' : (opts.important ? '⭐' : '▫️');
+    return `
+      <div style="display:flex;align-items:flex-start;gap:12px;background:${bg};border-right:6px solid ${accent};border-radius:12px;padding:14px 16px;margin-bottom:10px;">
+        <div style="font-size:20px;line-height:1;">${icon}</div>
+        <div style="flex:1;">
+          <div style="font-size:19px;font-weight:700;${textStyle}">${escapeHtml(t.text)}</div>
+          ${dueHtml}
+        </div>
+      </div>`;
+  }
+  function escapeHtml(s){
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+  function section(title, color, rows, emptyLabel){
+    const body = rows.length
+      ? rows.join('')
+      : `<div style="font-size:15px;color:#8a9c98;font-weight:600;padding:6px 4px;">${emptyLabel}</div>`;
+    return `
+      <div style="margin-bottom:26px;">
+        <div style="font-size:21px;font-weight:800;color:${color};margin-bottom:12px;">${title}</div>
+        ${body}
+      </div>`;
+  }
+
+  return `
+    <div id="reportRoot" style="width:750px;background:#ffffff;padding:36px 34px;direction:rtl;text-align:right;font-family:'IBM Plex Sans Arabic',sans-serif;color:#173330;">
+      <div style="background:linear-gradient(135deg,#8fc9d4,#4fae9c);border-radius:20px;padding:26px 28px;margin-bottom:28px;">
+        <div style="font-size:34px;font-weight:800;color:#fff;">📋 تقرير المهام</div>
+        <div style="font-size:16px;font-weight:600;color:rgba(255,255,255,0.92);margin-top:6px;">${dateStr}</div>
+        <div style="display:flex;gap:28px;margin-top:18px;">
+          <div style="background:rgba(255,255,255,0.25);border-radius:14px;padding:12px 18px;">
+            <div style="font-size:26px;font-weight:800;color:#fff;">${total}</div>
+            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);">إجمالي المهام</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.25);border-radius:14px;padding:12px 18px;">
+            <div style="font-size:26px;font-weight:800;color:#fff;">${doneCount}</div>
+            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);">مُنجزة</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.25);border-radius:14px;padding:12px 18px;">
+            <div style="font-size:26px;font-weight:800;color:#fff;">${pct}%</div>
+            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);">نسبة الإنجاز</div>
+          </div>
+        </div>
+      </div>
+
+      ${section('⭐ مهام مهمة', '#ff8a5c', important.map(t => taskRow(t, {accent:'#ff8a5c', bg:'#fff2ea', important:true})), 'لا توجد مهام مهمة حالياً')}
+      ${section('📌 مهام قيد الإنجاز', '#2b7a78', normal.map(t => taskRow(t, {accent:'#4fae9c', bg:'#eef8f5'})), 'لا توجد مهام نشطة')}
+      ${section('✅ مهام منجزة', '#3f9c74', done.map(t => taskRow(t, {accent:'#8fd9c4', bg:'#f2f9f6', done:true})), 'لا توجد مهام منجزة بعد')}
+
+      <div style="text-align:center;font-size:13px;font-weight:600;color:#a9bab6;margin-top:10px;">تم إنشاؤه بواسطة تطبيق مهامي</div>
+    </div>`;
+}
+
+async function generateReport(){
+  const btn = document.getElementById('reportOpenBtn');
+  const originalHTML = btn.innerHTML;
+  btn.innerHTML = '<span style="font-size:11px;">...جاري التجهيز</span>';
+  btn.disabled = true;
+  try{
+    await loadReportLibs();
+
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'fixed';
+    wrapper.style.top = '0';
+    wrapper.style.left = '-9999px';
+    wrapper.style.zIndex = '-1';
+    wrapper.innerHTML = buildReportHTML();
+    document.body.appendChild(wrapper);
+
+    const target = document.getElementById('reportRoot');
+    const canvas = await html2canvas(target, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+    document.body.removeChild(wrapper);
+
+    const { jsPDF } = window.jspdf;
+    const pageWidth = 595.28; // A4 pt width
+    const pageHeight = 841.89; // A4 pt height
+    const margin = 20;
+    const usableWidth = pageWidth - margin * 2;
+    const imgWidth = usableWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    let heightLeft = imgHeight;
+    let position = margin;
+    const imgData = canvas.toDataURL('image/png');
+
+    doc.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+    heightLeft -= (pageHeight - margin * 2);
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight + margin;
+      doc.addPage();
+      doc.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+      heightLeft -= (pageHeight - margin * 2);
+    }
+
+    const dateStr = new Date().toISOString().slice(0,10);
+    doc.save(`mahamy-report-${dateStr}.pdf`);
+  }catch(err){
+    alert('تعذّر إنشاء التقرير. تأكد من الاتصال بالإنترنت وحاول مرة أخرى.');
+  }finally{
+    btn.innerHTML = originalHTML;
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('reportOpenBtn').onclick = generateReport;
+
+// ---- backup / restore (manual, offline, no account needed) ----
+const backupOverlay = document.getElementById('backupOverlay');
+document.getElementById('backupOpenBtn').onclick = () => backupOverlay.classList.add('open');
+document.getElementById('backupCloseBtn').onclick = () => backupOverlay.classList.remove('open');
+backupOverlay.onclick = (e) => { if(e.target === backupOverlay) backupOverlay.classList.remove('open'); };
+
+document.getElementById('backupExportBtn').onclick = () => {
+  const payload = {
+    app: 'mahamy',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    tasks: tasks,
+    notes: notes
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `mahamy-backup-${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
+
+const backupFileInput = document.getElementById('backupFileInput');
+document.getElementById('backupImportBtn').onclick = () => backupFileInput.click();
+backupFileInput.onchange = () => {
+  const file = backupFileInput.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      if(!data || !Array.isArray(data.tasks) || !Array.isArray(data.notes)){
+        alert('ملف النسخة الاحتياطية غير صالح.');
+        return;
+      }
+      const dateLabel = data.exportedAt ? new Date(data.exportedAt).toLocaleDateString('ar') : 'غير معروف';
+      if(!confirm(`استيراد هذه النسخة (بتاريخ ${dateLabel}) سيستبدل كل مهامك وملاحظاتك الحالية. متابعة؟`)) return;
+      tasks = data.tasks;
+      notes = data.notes;
+      saveTasks();
+      saveNotes();
+      render();
+      renderNotes();
+      backupOverlay.classList.remove('open');
+      alert('تم استيراد النسخة الاحتياطية بنجاح.');
+    }catch(err){
+      alert('تعذّرت قراءة الملف. تأكد أنه ملف نسخة احتياطية صحيح.');
+    }
+  };
+  reader.readAsText(file);
+  backupFileInput.value = '';
+};
+
+// ---- archive overlay ----
+const archiveOverlay = document.getElementById('archiveOverlay');
+document.getElementById('archiveOpenBtn').onclick = () => {
+  renderArchiveList();
+  archiveOverlay.classList.add('open');
+};
+document.getElementById('closeArchiveBtn').onclick = () => archiveOverlay.classList.remove('open');
+archiveOverlay.onclick = (e) => { if(e.target === archiveOverlay) archiveOverlay.classList.remove('open'); };
+
+// ---- notes feature ----
+const NOTES_KEY = 'mahamy_notes_v1';
+let notes = [];
+let editingNoteId = null;
+let selectedColorIdx = 0;
+
+const NOTE_COLORS = [
+  { bg:'#a8e6cf', pin:'#0b5c4f' },
+  { bg:'#ffdcb8', pin:'#c9631f' },
+  { bg:'#cdeef0', pin:'#2b7a78' },
+  { bg:'#ffe9a8', pin:'#8a6d1a' },
+  { bg:'#c9e4de', pin:'#1c3a3a' },
+];
+
+function loadNotes(){
+  try{
+    const raw = localStorage.getItem(NOTES_KEY);
+    notes = raw ? JSON.parse(raw) : [];
+  }catch(e){ notes = []; }
+}
+function saveNotes(){
+  localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+}
+
+function showNotesView(){
+  document.getElementById('tasksView').style.display = 'none';
+  document.getElementById('notesView').style.display = 'block';
+  renderNotes();
+}
+function showTasksView(){
+  document.getElementById('notesView').style.display = 'none';
+  document.getElementById('tasksView').style.display = 'block';
+}
+
+function renderNotes(){
+  const board = document.getElementById('notesBoard');
+  board.innerHTML = '';
+  if(notes.length === 0){
+    board.innerHTML = '<div class="notes-empty">لا توجد ملاحظات بعد، اضغط + لإضافة ملاحظة جديدة</div>';
+    return;
+  }
+  const sorted = [...notes].sort((a,b)=>b.createdAt-a.createdAt);
+  sorted.forEach((n, i) => {
+    const color = NOTE_COLORS[n.colorIdx % NOTE_COLORS.length];
+    const rotate = (n.id.charCodeAt(0) % 2 === 0) ? '-1.5deg' : '1.5deg';
+
+    const card = document.createElement('div');
+    card.className = 'sticky-note';
+    card.style.background = color.bg;
+    card.style.transform = `rotate(${rotate})`;
+
+    const pin = document.createElement('div');
+    pin.className = 'pin';
+    pin.style.background = color.pin;
+
+    const text = document.createElement('div');
+    text.className = 'note-text';
+    text.textContent = n.text;
+
+    const actions = document.createElement('div');
+    actions.className = 'note-actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#1c3a3a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+    editBtn.onclick = () => openEditNoteModal(n.id);
+
+    const delBtn = document.createElement('button');
+    delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#e2685c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+    delBtn.onclick = () => deleteNote(n.id);
+
+    actions.appendChild(editBtn);
+    actions.appendChild(delBtn);
+
+    card.appendChild(pin);
+    card.appendChild(text);
+    card.appendChild(actions);
+    board.appendChild(card);
+  });
+}
+
+function addNote(text, colorIdx){
+  notes.push({ id: uid(), text, colorIdx, createdAt: Date.now() });
+  saveNotes();
+  renderNotes();
+}
+function updateNote(id, text, colorIdx){
+  const n = notes.find(x=>x.id===id);
+  if(!n) return;
+  n.text = text;
+  n.colorIdx = colorIdx;
+  saveNotes();
+  renderNotes();
+}
+function deleteNote(id){
+  if(!confirm('حذف هذه الملاحظة؟')) return;
+  notes = notes.filter(x=>x.id!==id);
+  saveNotes();
+  renderNotes();
+}
+
+// note modal
+const noteOverlay = document.getElementById('noteModalOverlay');
+const noteModalTitle = document.getElementById('noteModalTitle');
+const noteInput = document.getElementById('noteInput');
+const noteSaveBtn = document.getElementById('noteSaveBtn');
+const colorRow = document.getElementById('colorRow');
+
+function buildColorSwatches(){
+  colorRow.innerHTML = '';
+  NOTE_COLORS.forEach((c, idx) => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch' + (idx === selectedColorIdx ? ' selected' : '');
+    sw.style.background = c.bg;
+    sw.onclick = () => { selectedColorIdx = idx; buildColorSwatches(); };
+    colorRow.appendChild(sw);
+  });
+}
+
+function openAddNoteModal(){
+  editingNoteId = null;
+  noteModalTitle.textContent = 'ملاحظة جديدة';
+  noteSaveBtn.textContent = 'إضافة';
+  noteInput.value = '';
+  selectedColorIdx = Math.floor(Math.random()*NOTE_COLORS.length);
+  buildColorSwatches();
+  noteOverlay.classList.add('open');
+  setTimeout(()=>noteInput.focus(), 100);
+}
+function openEditNoteModal(id){
+  const n = notes.find(x=>x.id===id);
+  if(!n) return;
+  editingNoteId = id;
+  noteModalTitle.textContent = 'تعديل الملاحظة';
+  noteSaveBtn.textContent = 'حفظ';
+  noteInput.value = n.text;
+  selectedColorIdx = n.colorIdx;
+  buildColorSwatches();
+  noteOverlay.classList.add('open');
+  setTimeout(()=>noteInput.focus(), 100);
+}
+
+document.getElementById('notesOpenBtn').onclick = showNotesView;
+document.getElementById('notesBackBtn').onclick = showTasksView;
+document.getElementById('noteAddBtn').onclick = openAddNoteModal;
+document.getElementById('noteCancelBtn').onclick = () => noteOverlay.classList.remove('open');
+noteOverlay.onclick = (e) => { if(e.target === noteOverlay) noteOverlay.classList.remove('open'); };
+noteSaveBtn.onclick = () => {
+  const val = noteInput.value.trim();
+  if(!val) return;
+  if(editingNoteId){
+    updateNote(editingNoteId, val, selectedColorIdx);
+  } else {
+    addNote(val, selectedColorIdx);
+  }
+  noteOverlay.classList.remove('open');
+};
+
+loadNotes();
+
+loadTasks();
+render();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(()=>{});
+    // Reload once when a NEW service worker takes control (i.e. a real update
+    // was found), so the freshly-deployed version shows immediately.
+    // This does NOT fire on the very first install, only on updates.
+    let swRefreshed = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (swRefreshed) return;
+      swRefreshed = true;
+      window.location.reload();
+    });
+  });
+}
+</script>
+</body>
+</html>
