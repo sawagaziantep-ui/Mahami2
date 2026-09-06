@@ -288,6 +288,15 @@
     text-align:right;
     margin-bottom:10px;
   }
+  .section-header{
+    font-size:20px;
+    font-weight:800;
+    color:var(--ink);
+    text-align:right;
+    padding:0 18px;
+    margin:22px 0 10px 0;
+  }
+  .history-item .checkbox{cursor:pointer;}
   .chart-sub{
     font-size:12px;
     color:var(--ink-soft);
@@ -780,16 +789,30 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="archiveOverlay">
-  <div class="archive-sheet">
-    <h3>✅ المهام المنجزة</h3>
-    <div class="archive-list" id="completedList"></div>
-    <h3 style="margin-top:22px;">🗄️ الأرشيف</h3>
-    <div class="archive-list" id="archiveList"></div>
-    <button class="close-archive-btn" id="closeArchiveBtn">إغلاق</button>
-  </div>
-</div>
 </div><!-- /tasksView -->
+
+<div id="completedView" style="display:none;">
+  <div class="header notes-header">
+    <div class="header-top">
+      <button class="logout-btn" id="completedBackBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" transform="rotate(180 12 12)"/></svg>
+        رجوع
+      </button>
+      <div class="title-block">
+        <h1 style="font-size:32px;">المهام المنجزة</h1>
+        <div class="sub">إنجازاتك وأرشيفك ✅</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">✅ المهام المنجزة</div>
+  <div class="task-list" id="completedList"></div>
+
+  <div class="section-header">🗄️ الأرشيف</div>
+  <div class="task-list" id="archiveList"></div>
+
+  <div style="height:36px;"></div>
+</div>
 
 <div id="notesView" style="display:none;">
   <div class="header notes-header">
@@ -999,7 +1022,8 @@ function onDragEnd(){
 }
 
 function formatCreatedDate(ts){
-  return new Intl.DateTimeFormat('ar', {day:'numeric', month:'short'}).format(new Date(ts));
+  const d = new Date(ts);
+  return d.getDate() + '/' + (d.getMonth() + 1);
 }
 
 function renderTask(t){
@@ -1161,47 +1185,63 @@ function permanentDeleteTask(id){
   render();
 }
 
+function buildHistoryRow(t, opts){
+  // opts: { checked, onCheckboxClick, dateLabel, strike }
+  const item = document.createElement('div');
+  item.className = 'task-item history-item' + (t.important ? ' important' : '');
+
+  const leftIcons = document.createElement('div');
+  leftIcons.className = 'task-left-icons';
+
+  const trashBtn = document.createElement('button');
+  trashBtn.className = 'icon-btn trash-btn';
+  trashBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+  trashBtn.onclick = () => permanentDeleteTask(t.id);
+  leftIcons.appendChild(trashBtn);
+
+  const main = document.createElement('div');
+  main.className = 'task-main';
+
+  const text = document.createElement('div');
+  text.className = 'task-text';
+  if(opts.strike){ text.style.textDecoration = 'line-through'; text.style.color = '#8a9c98'; }
+  text.textContent = t.text;
+  main.appendChild(text);
+
+  const dateLabel = document.createElement('div');
+  dateLabel.className = 'created-date';
+  dateLabel.textContent = opts.dateLabel;
+  main.appendChild(dateLabel);
+
+  const checkbox = document.createElement('div');
+  checkbox.className = 'checkbox' + (opts.checked ? ' checked' : '');
+  checkbox.innerHTML = opts.checked
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="#4fae9c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-9.36L1 10"/></svg>';
+  checkbox.onclick = opts.onCheckboxClick;
+
+  item.appendChild(checkbox);
+  item.appendChild(main);
+  item.appendChild(leftIcons);
+  return item;
+}
+
 function renderArchiveList(){
   const wrap = document.getElementById('archiveList');
   if(!wrap) return;
   const archived = tasks.filter(t=>t.archived).sort((a,b)=>(b.completedAt||b.createdAt)-(a.completedAt||a.createdAt));
   if(archived.length === 0){
-    wrap.innerHTML = '<div class="archive-empty">لا توجد مهام مؤرشفة</div>';
+    wrap.innerHTML = '<div class="empty-state">لا توجد مهام مؤرشفة</div>';
     return;
   }
   wrap.innerHTML = '';
   archived.forEach(t=>{
-    const row = document.createElement('div');
-    row.className = 'archive-item';
-
-    const actions = document.createElement('div');
-    actions.className = 'arc-actions';
-
-    const delBtn = document.createElement('button');
-    delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#e2685c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
-    delBtn.onclick = () => permanentDeleteTask(t.id);
-
-    const restoreBtn = document.createElement('button');
-    restoreBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#4fae9c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-9.36L1 10"/></svg>';
-    restoreBtn.onclick = () => restoreTask(t.id);
-
-    actions.appendChild(delBtn);
-    actions.appendChild(restoreBtn);
-
-    const textWrap = document.createElement('div');
-    textWrap.style.flex = '1';
-    const txt = document.createElement('div');
-    txt.className = 'arc-text';
-    txt.textContent = t.text;
-    const date = document.createElement('div');
-    date.className = 'arc-date';
-    date.style.textAlign = 'right';
-    date.textContent = t.completedAt ? 'أُنجزت: ' + new Intl.DateTimeFormat('ar', {day:'numeric', month:'short', year:'numeric'}).format(new Date(t.completedAt)) : '';
-    textWrap.appendChild(txt);
-    textWrap.appendChild(date);
-
-    row.appendChild(actions);
-    row.appendChild(textWrap);
+    const row = buildHistoryRow(t, {
+      checked: false,
+      onCheckboxClick: () => restoreTask(t.id),
+      dateLabel: formatCreatedDate(t.completedAt || t.createdAt),
+      strike: false
+    });
     wrap.appendChild(row);
   });
 }
@@ -1211,44 +1251,17 @@ function renderCompletedList(){
   if(!wrap) return;
   const doneList = tasks.filter(t=>t.done && !t.archived).sort((a,b)=>(b.completedAt||0)-(a.completedAt||0));
   if(doneList.length === 0){
-    wrap.innerHTML = '<div class="archive-empty">لا توجد مهام منجزة بعد</div>';
+    wrap.innerHTML = '<div class="empty-state">لا توجد مهام منجزة بعد</div>';
     return;
   }
   wrap.innerHTML = '';
   doneList.forEach(t=>{
-    const row = document.createElement('div');
-    row.className = 'archive-item';
-
-    const actions = document.createElement('div');
-    actions.className = 'arc-actions';
-
-    const delBtn = document.createElement('button');
-    delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#e2685c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
-    delBtn.onclick = () => permanentDeleteTask(t.id);
-
-    const restoreBtn = document.createElement('button');
-    restoreBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#4fae9c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-9.36L1 10"/></svg>';
-    restoreBtn.onclick = () => restoreDoneTask(t.id);
-
-    actions.appendChild(delBtn);
-    actions.appendChild(restoreBtn);
-
-    const textWrap = document.createElement('div');
-    textWrap.style.flex = '1';
-    const txt = document.createElement('div');
-    txt.className = 'arc-text';
-    txt.style.textDecoration = 'line-through';
-    txt.style.color = '#8a9c98';
-    txt.textContent = t.text;
-    const date = document.createElement('div');
-    date.className = 'arc-date';
-    date.style.textAlign = 'right';
-    date.textContent = t.completedAt ? '✅ أُنجزت: ' + new Intl.DateTimeFormat('ar', {day:'numeric', month:'short', year:'numeric'}).format(new Date(t.completedAt)) : '';
-    textWrap.appendChild(txt);
-    textWrap.appendChild(date);
-
-    row.appendChild(actions);
-    row.appendChild(textWrap);
+    const row = buildHistoryRow(t, {
+      checked: true,
+      onCheckboxClick: () => restoreDoneTask(t.id),
+      dateLabel: formatCreatedDate(t.completedAt || t.createdAt),
+      strike: true
+    });
     wrap.appendChild(row);
   });
 }
@@ -1606,15 +1619,19 @@ backupFileInput.onchange = () => {
   backupFileInput.value = '';
 };
 
-// ---- archive overlay ----
-const archiveOverlay = document.getElementById('archiveOverlay');
-document.getElementById('archiveOpenBtn').onclick = () => {
+// ---- completed / archive page (full page, matches home page design) ----
+function showCompletedView(){
+  document.getElementById('tasksView').style.display = 'none';
+  document.getElementById('completedView').style.display = 'block';
   renderArchiveList();
   renderCompletedList();
-  archiveOverlay.classList.add('open');
-};
-document.getElementById('closeArchiveBtn').onclick = () => archiveOverlay.classList.remove('open');
-archiveOverlay.onclick = (e) => { if(e.target === archiveOverlay) archiveOverlay.classList.remove('open'); };
+}
+function showTasksViewFromCompleted(){
+  document.getElementById('completedView').style.display = 'none';
+  document.getElementById('tasksView').style.display = 'block';
+}
+document.getElementById('archiveOpenBtn').onclick = showCompletedView;
+document.getElementById('completedBackBtn').onclick = showTasksViewFromCompleted;
 
 // ---- notes feature ----
 const NOTES_KEY = 'mahamy_notes_v1';
