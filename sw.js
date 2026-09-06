@@ -1,6 +1,6 @@
 // Cache name is versioned with a build timestamp so every new deploy of this
 // file automatically invalidates old caches — no manual bumping needed.
-const CACHE_VERSION = '2026-08-24-1';
+const CACHE_VERSION = '2026-09-06-1';
 const CACHE_NAME = 'mahamy-cache-' + CACHE_VERSION;
 
 // Files that make up the app shell itself. These change on every deploy,
@@ -13,7 +13,7 @@ const APP_SHELL = ['./', './index.html', './manifest.json'];
 // no benefit — falls back to network if not yet cached.
 const STATIC_ASSETS = ['./icon-192.png', './icon-512.png'];
 
-const FONT_CSS_URL = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap';
+const FONT_CSS_URL = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@700;800;900&display=swap';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
